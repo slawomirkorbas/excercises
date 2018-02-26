@@ -1,0 +1,9 @@
+*.log
+*.ini
+
+# IntelliJ project files
+*.iml
+
+#target directory
+.idea/
+target/
