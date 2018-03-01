@@ -9,40 +9,33 @@ public class MaxUniqueNumberInSubarray {
 
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
-        Deque deque = new ArrayDeque<>();
+        //Deque deque = new ArrayDeque<>();
         int n = in.nextInt();
         int m = in.nextInt();
 
-        List<Integer> inputList = new ArrayList<>();
+        int maxUnique = 0;
+        LinkedList<Integer> frame = new LinkedList<>();
         for (int i = 0; i < n; i++) {
-            inputList.add(in.nextInt());
+            frame.add(in.nextInt());
+            if( frame.size() == m ) {
+                int unique = getUniqueCount( frame );
+                maxUnique = unique > maxUnique ? unique : maxUnique;
+                frame.removeFirst();
+            }
         }
-
-        System.out.println( findMaxUniqueCount( m, inputList ) );
+        System.out.println( maxUnique );
     }
 
-    public static Integer findMaxUniqueCount( int m, List<Integer> inputList ) {
-        int idx = 0;
-        int maxUnique = 0;
-        Set<Integer> uniqueSet = new HashSet<>();
-        for (int i = 0; i < inputList.size(); i++) {
-            if( idx < m ) {
-                Integer num = inputList.get(i);
-                if( !uniqueSet.contains(num) ) {
-                    uniqueSet.add(inputList.get(i));
-                }
-                else {
-                    uniqueSet.remove(num);
-                }
-                idx++;
+    public static Integer getUniqueCount( LinkedList<Integer> frame ) {
+        Set<Integer> duplicates = new HashSet<>();
+        Set<Integer> unique = new HashSet<>();
+        frame.forEach( num -> {
+            if( unique.contains(num) ) {
+                duplicates.add(num);
             }
-            if( idx == m ) {
-                idx = 0;
-                maxUnique = maxUnique < uniqueSet.size() ? uniqueSet.size() : maxUnique;
-                uniqueSet.clear();
-                i = i - m + 2;
-            }
-        }
-        return maxUnique;
+            unique.add(num);
+        });
+        duplicates.forEach( d -> unique.remove(d) );
+        return unique.size();
     }
 }

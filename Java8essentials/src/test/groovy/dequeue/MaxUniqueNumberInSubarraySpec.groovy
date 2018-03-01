@@ -13,18 +13,12 @@ import spock.lang.Unroll
 class MaxUniqueNumberInSubarraySpec extends Specification{
 
     @Unroll
-    def 'findMaxUniqueCount: works as expected'() {
+    def 'getUniqueCount: works as expected'() {
         given:
-            List inputList = [ 2,2,3,5,6,6,8,9,4,3,3,2 ]
+        LinkedList<Integer> frame = [1,2,2,2,3,4,5,6,7,7,7,1];
 
         expect:
-            maxUnique == MaxUniqueNumberInSubarray.findMaxUniqueCount( windowSize, inputList )
-
-        where:
-            windowSize | maxUnique
-            4          | 4
-            6          | 4
-
+            4 == MaxUniqueNumberInSubarray.getUniqueCount( frame )
     }
 
 }
