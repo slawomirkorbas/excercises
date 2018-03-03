@@ -15,7 +15,7 @@ class MaxUniqueNumberInSubarraySpec extends Specification{
     @Unroll
     def 'getUniqueCount: works as expected'() {
         given:
-        LinkedList<Integer> frame = [1,2,2,2,3,4,5,6,7,7,7,1];
+            LinkedList<Integer> frame = [1,2,2,2,3,4,5,6,7,7,7,1];
 
         expect:
             4 == MaxUniqueNumberInSubarray.getUniqueCount( frame )

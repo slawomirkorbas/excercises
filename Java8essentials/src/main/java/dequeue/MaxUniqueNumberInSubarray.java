@@ -8,12 +8,13 @@ import java.util.*;
 public class MaxUniqueNumberInSubarray {
 
     public static void main(String[] args) {
+
         Scanner in = new Scanner(System.in);
         //Deque deque = new ArrayDeque<>();
         int n = in.nextInt();
         int m = in.nextInt();
 
-        int maxUnique = 0;
+        int maxUnique = -1;
         LinkedList<Integer> frame = new LinkedList<>();
         for (int i = 0; i < n; i++) {
             frame.add(in.nextInt());
