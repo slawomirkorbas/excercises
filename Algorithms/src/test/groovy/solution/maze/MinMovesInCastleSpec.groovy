@@ -9,9 +9,7 @@ import spock.lang.Specification
  * Time: 8:45 PM
  * To change this template use File | Settings | File Templates.
  */
-class MinMovesInCastleSpec extends Specification {
-
-    def 'getMinMovesCount 1x1: calculate correct number of moves'() {
+class MinMovesInCastleSpec extends Specification {    def 'getMinMovesCount 1x1: calculate correct number of moves'() {
 
         given:
             int[][] maze = [[0]]
