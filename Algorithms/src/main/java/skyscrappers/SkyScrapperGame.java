@@ -38,7 +38,73 @@ public class SkyScrapperGame {
         return routes;
     }
 
-    private static class NodeGroup {
+    /**
+     * Correct alghoritm is here
+     * @param skyScrappers
+     * @return
+     */
+    public static long getRoutes_complexity_On( int[] skyScrappers ) {
+        long routesCount = 0;
+        Stack<Integer> stack = new Stack<>();
+
+        for( int i = 0; i < skyScrappers.length; i++ ) {
+            int s = skyScrappers[i];
+            if( stack.isEmpty() ) {
+                stack.add( s );
+            }
+            else if( stack.peek() > s ) {
+                stack.add( s );
+            }
+            else if( stack.peek() < s ) {
+                while( !stack.isEmpty() && stack.peek() < s ) {
+                    long sameS, cnt = 0;
+                    do {
+                        sameS = stack.pop();
+                        cnt++;
+                    } while( !stack.isEmpty() &&  stack.peek() == sameS );
+                    if( cnt >= 2 ) {
+                        routesCount += ((cnt-1)*cnt);
+                    }
+                }
+                stack.add( s );
+            }
+            else if( stack.peek() == s ) {
+                stack.add( s );
+            }
+        }
+
+        if( !stack.isEmpty() ) {
+            long cnt = 1;
+            boolean same;
+            int s1 = stack.pop();
+
+            while( !stack.isEmpty() ) {
+                same = (s1 == stack.peek());
+                if( same ) {
+                    stack.pop();
+                    cnt++;
+                    if( stack.isEmpty() ) {
+                        if( cnt > 1 ) {
+                            routesCount += ((cnt-1)*cnt);
+                        }
+                    }
+                }
+                else {
+                    if( cnt > 1 ) {
+                        routesCount += ((cnt-1)*cnt);
+                    }
+                    cnt = 1;
+                    s1 = stack.pop();
+                }
+             }
+        }
+
+        return routesCount;
+    }
+
+
+    /*
+     private static class NodeGroup {
         int count;
         int height;
         NodeGroup( int height, int count ) {
@@ -63,34 +129,34 @@ public class SkyScrapperGame {
             }
             else if( stack.peek() < height ) {
                 while( true ) {
-                    stack.pop();
-
                     if( stack.isEmpty() ) {
                         stack.add( height );
-                        break;
                     }
-                    else if( stack.peek() == height  ) {
+                    else if(  stack.peek() < height ) {
+                        stack.pop();
+                        continue;
+                    }
+                    else if(  stack.peek() == height  ) {
                         if( nodeGroups.size() > 0 ) {
                             if( nodeGroups.peek().height == height ) {
-                                nodeGroups.peek().count++;
+                                addNodeGroup( nodeGroups, height );
                             }
                             else {
                                 while ( !nodeGroups.isEmpty() && nodeGroups.peek().height < height ) {
                                     NodeGroup gr = nodeGroups.pop();
-                                    routesCount += ( gr.count * (gr.count - 1 ) );
+                                    routesCount +=  ( gr.count * (gr.count - 1 ) );
                                 }
                                 addNodeGroup( nodeGroups, height );
                             }
                         }
                         else {
-                            nodeGroups.add( new NodeGroup( height, 2 ));
+                            addNodeGroup( nodeGroups, height );
                         }
-                        break;
                     }
-                    else if(stack.peek() > height ) {
+                    else if(  stack.peek() > height ) {
                         stack.add( height );
-                        break;
                     }
+                    break;
                 }
             }
             else if( stack.peek() == height ) {
@@ -100,9 +166,6 @@ public class SkyScrapperGame {
 
         // calculate total possible routes
         routesCount += nodeGroups.stream().mapToInt( g -> (g.count-1)*g.count ).sum();
-//        for( int n = 0; n < nodeGroups.size(); n++ ) {
-//            routesCount += (( nodeGroups.get(n).count - 1 ) * nodeGroups.get(n).count);
-//        }
 
         return routesCount;
     }
@@ -115,6 +178,5 @@ public class SkyScrapperGame {
             nodeGroups.add( new NodeGroup( height, 2 ));
         }
     }
-
-
+     */
 }
