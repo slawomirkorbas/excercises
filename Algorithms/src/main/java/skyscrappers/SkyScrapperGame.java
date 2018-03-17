@@ -48,57 +48,37 @@ public class SkyScrapperGame {
         Stack<Integer> stack = new Stack<>();
 
         for( int i = 0; i < skyScrappers.length; i++ ) {
-            int s = skyScrappers[i];
-            if( stack.isEmpty() ) {
-                stack.add( s );
+            if( stack.isEmpty() || stack.peek() >= skyScrappers[i] ) {
+                stack.add( skyScrappers[i] );
             }
-            else if( stack.peek() > s ) {
-                stack.add( s );
-            }
-            else if( stack.peek() < s ) {
-                while( !stack.isEmpty() && stack.peek() < s ) {
-                    long sameS, cnt = 0;
+            else if( stack.peek() < skyScrappers[i] ) {
+                while( !stack.isEmpty() && stack.peek() < skyScrappers[i] ) {
+                    long s1, cnt = 0;
                     do {
-                        sameS = stack.pop();
+                        s1 = stack.pop();
                         cnt++;
-                    } while( !stack.isEmpty() &&  stack.peek() == sameS );
+                    } while( !stack.isEmpty() && stack.peek() == s1 );
                     if( cnt >= 2 ) {
                         routesCount += ((cnt-1)*cnt);
                     }
                 }
-                stack.add( s );
-            }
-            else if( stack.peek() == s ) {
-                stack.add( s );
+                stack.add( skyScrappers[i] );
             }
         }
 
-        if( !stack.isEmpty() ) {
-            long cnt = 1;
-            boolean same;
-            int s1 = stack.pop();
-
-            while( !stack.isEmpty() ) {
-                same = (s1 == stack.peek());
-                if( same ) {
-                    stack.pop();
-                    cnt++;
-                    if( stack.isEmpty() ) {
-                        if( cnt > 1 ) {
-                            routesCount += ((cnt-1)*cnt);
-                        }
-                    }
-                }
-                else {
-                    if( cnt > 1 ) {
-                        routesCount += ((cnt-1)*cnt);
-                    }
-                    cnt = 1;
-                    s1 = stack.pop();
-                }
-             }
+        long cnt = 0, s1 = -1;
+        while( !stack.isEmpty() ) {
+            if( s1 == -1 || stack.peek() == s1 ) {
+                s1 = stack.pop();
+                cnt++;
+            }
+            else {
+                routesCount += ( cnt > 1 ? ((cnt-1)*cnt) : 0 );
+                s1 = stack.pop();
+                cnt = 1;
+            }
         }
-
+        routesCount += ( cnt > 1 ? ((cnt-1)*cnt) : 0 );
         return routesCount;
     }
 
