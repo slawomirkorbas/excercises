@@ -89,14 +89,14 @@ public class SkyscraperGame {
         }
     }
 
-    public static int getRoutes_complexity_On( int[] skyScrappers ) {
+    public static int getRoutes_complexity_On( int[] skyScrapers ) {
         int routesCount = 0, height = 0;
         Stack<Integer> stack = new Stack<>();
         Stack<NodeGroup> nodeGroups = new Stack<>();
 
         // store node groups having same height without higher node in path between them...
-        for( int i = 0; i < skyScrappers.length; i++ ) {
-            height = skyScrappers[i];
+        for( int i = 0; i < skyScrapers.length; i++ ) {
+            height = skyScrapers[i];
             if( stack.isEmpty() ) {
                 stack.add( height );
             }
