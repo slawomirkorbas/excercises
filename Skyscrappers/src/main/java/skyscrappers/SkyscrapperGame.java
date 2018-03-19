@@ -36,7 +36,7 @@ public class SkyscrapperGame {
     }
 
     /**
-     * Faster solution
+     * Faster solution using stack
      * @param skyScrappers
      * @return
      */
