@@ -144,7 +144,7 @@ class SkyscraperGameSpec extends Specification  {
             int[] skyScrapers = new int[array.length];
             int i=0;
             for(String str : array){
-                skyScrappers[i] = Integer.parseInt(str);
+                skyScrapers[i] = Integer.parseInt(str);
                 i++;
             }
 
