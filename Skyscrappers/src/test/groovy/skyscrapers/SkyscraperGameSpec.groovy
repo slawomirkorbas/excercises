@@ -1,4 +1,4 @@
-package skyscrappers
+package skyscrapers
 
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -10,7 +10,7 @@ import spock.lang.Unroll
  * Time: 5:45 PM
  * To change this template use File | Settings | File Templates.
  */
-class SkyscrapperGameSpec extends Specification  {
+class SkyscraperGameSpec extends Specification  {
 
     def 'getRoutes_complexity_On2: find correct number of possible routes'() {
         given:
@@ -18,7 +18,7 @@ class SkyscrapperGameSpec extends Specification  {
             // 12
         expect:
             long time = (new Date()).getTime();
-            12 == SkyscrapperGame.getRoutes_On2( skyScrappers )
+            12 == SkyscraperGame.getRoutes_On2( skyScrappers )
             System.out.println( (new Date()).getTime() - time + " milliseconds" )
     }
 
@@ -30,7 +30,7 @@ class SkyscrapperGameSpec extends Specification  {
             intArray = skyScrappers.toArray(intArray);
 
         expect:
-            expected == SkyscrapperGame.getRoutes_On2( intArray )
+            expected == SkyscraperGame.getRoutes_On2( intArray )
 
         where:
             skyScrappers                    | expected
@@ -47,7 +47,7 @@ class SkyscrapperGameSpec extends Specification  {
             intArray = skyScrappers.toArray(intArray);
 
         expect:
-            expected == SkyscrapperGame.getRoutes_On( intArray )
+            expected == SkyscraperGame.getRoutes_On( intArray )
 
         where:
             skyScrappers                                     | expected
@@ -90,7 +90,7 @@ class SkyscrapperGameSpec extends Specification  {
             intArray = skyScrappers.toArray(intArray);
 
         expect:
-            expected == SkyscrapperGame.getRoutes_On( intArray )
+            expected == SkyscraperGame.getRoutes_On( intArray )
 
         where:
             expected | skyScrappers
@@ -100,48 +100,48 @@ class SkyscrapperGameSpec extends Specification  {
 
     def 'getRoutes_complexity_On: test 3'() {
         given:
-            File sampleFile = new File('src/main/resources/skyscrappers_sample_data.txt')
+            File sampleFile = new File('src/main/resources/skyscrapers_sample_data.txt')
             List<String> lines = sampleFile.readLines()
             String[] array = lines.get(0).split(" ");
-            int[] skyScrappers = new int[array.length];
+            int[] skyScrapers = new int[array.length];
             int i=0;
             for(String str : array){
-                skyScrappers[i] = Integer.parseInt(str);
+                skyScrapers[i] = Integer.parseInt(str);
                 i++;
             }
 
         expect:
             long time = (new Date()).getTime();
-            //5364 == SkyscrapperGame.getRoutes_On2( skyScrappers )
-            5364 == SkyscrapperGame.getRoutes_On( skyScrappers )
+            //5364 == SkyscraperGame.getRoutes_On2( skyScrapers )
+            5364 == SkyscraperGame.getRoutes_On( skyScrapers )
             System.out.println( (new Date()).getTime() - time + " milliseconds" )
     }
 
     def 'getRoutes_complexity_On: test 4'() {
         given:
-            File sampleFile = new File('src/main/resources/skyscrappers_sample_data2')
+            File sampleFile = new File('src/main/resources/skyscrapers_sample_data2')
             List<String> lines = sampleFile.readLines()
             String[] array = lines.get(0).split(" ");
-            int[] skyScrappers = new int[array.length];
+            int[] skyScrapers = new int[array.length];
             int i=0;
             for(String str : array){
-                skyScrappers[i] = Integer.parseInt(str);
+                skyScrapers[i] = Integer.parseInt(str);
                 i++;
             }
 
         expect:
             long time = (new Date()).getTime();
-            //220288314 == SkyscrapperGame.getRoutes_On2( skyScrappers )
-            220288314 == SkyscrapperGame.getRoutes_On( skyScrappers )
+            //220288314 == SkyscraperGame.getRoutes_On2( skyScrapers )
+            220288314 == SkyscraperGame.getRoutes_On( skyScrapers )
             System.out.println( (new Date()).getTime() - time + " milliseconds" )
     }
 
     def 'getRoutes_complexity_On: test 5'() {
         given:
-            File sampleFile = new File('src/main/resources/skyscrappers_sample_data3.txt')
+            File sampleFile = new File('src/main/resources/skyscrapers_sample_data3.txt')
             List<String> lines = sampleFile.readLines()
             String[] array = lines.get(0).split(" ");
-            int[] skyScrappers = new int[array.length];
+            int[] skyScrapers = new int[array.length];
             int i=0;
             for(String str : array){
                 skyScrappers[i] = Integer.parseInt(str);
@@ -150,8 +150,8 @@ class SkyscrapperGameSpec extends Specification  {
 
         expect:
             long time = (new Date()).getTime();
-            //220288314 == SkyscrapperGame.getRoutes_On2( skyScrappers )
-            89999700000 == SkyscrapperGame.getRoutes_On( skyScrappers )
+            //220288314 == SkyscraperGame.getRoutes_On2( skyScrapers )
+            89999700000 == SkyscraperGame.getRoutes_On( skyScrapers )
             System.out.println( (new Date()).getTime() - time + " milliseconds" )
     }
 

@@ -1,6 +1,5 @@
-package skyscrappers;
+package skyscrapers;
 
-import java.util.Scanner;
 import java.util.Stack;
 
 /**
@@ -11,21 +10,21 @@ import java.util.Stack;
  * Date: 2/21/18
  * Time: 8:09 PM
  */
-public class SkyscrapperGame {
+public class SkyscraperGame {
 
     /**
      * Slow solution  - not recommended
-     * @param skyScrappers
+     * @param skyScrapers
      * @return
      */
-    public static int getRoutes_On2( int[] skyScrappers ) {
+    public static int getRoutes_On2( int[] skyScrapers ) {
         int routes = 0;
-        for( int i = 0; i < skyScrappers.length; i++ ) {
-            for( int j = i + 1; j < skyScrappers.length; j++ ) {
-                if( skyScrappers[i] < skyScrappers[j] ) {
+        for( int i = 0; i < skyScrapers.length; i++ ) {
+            for( int j = i + 1; j < skyScrapers.length; j++ ) {
+                if( skyScrapers[i] < skyScrapers[j] ) {
                     break;
                 }
-                else if( skyScrappers[i] == skyScrappers[j] ) {
+                else if( skyScrapers[i] == skyScrapers[j] ) {
                     routes++;
                 }
             }
@@ -37,19 +36,19 @@ public class SkyscrapperGame {
 
     /**
      * Faster solution using stack
-     * @param skyScrappers
+     * @param skyScrapers
      * @return
      */
-    public static long getRoutes_On( int[] skyScrappers ) {
+    public static long getRoutes_On( int[] skyScrapers ) {
         long routesCount = 0;
         Stack<Integer> stack = new Stack<>();
 
-        for( int i = 0; i < skyScrappers.length; i++ ) {
-            if( stack.isEmpty() || stack.peek() >= skyScrappers[i] ) {
-                stack.add( skyScrappers[i] );
+        for( int i = 0; i < skyScrapers.length; i++ ) {
+            if( stack.isEmpty() || stack.peek() >= skyScrapers[i] ) {
+                stack.add( skyScrapers[i] );
             }
-            else if( stack.peek() < skyScrappers[i] ) {
-                while( !stack.isEmpty() && stack.peek() < skyScrappers[i] ) {
+            else if( stack.peek() < skyScrapers[i] ) {
+                while( !stack.isEmpty() && stack.peek() < skyScrapers[i] ) {
                     long s1, cnt = 0;
                     do {
                         s1 = stack.pop();
@@ -59,7 +58,7 @@ public class SkyscrapperGame {
                         routesCount += ((cnt-1)*cnt);
                     }
                 }
-                stack.add( skyScrappers[i] );
+                stack.add( skyScrapers[i] );
             }
         }
 
