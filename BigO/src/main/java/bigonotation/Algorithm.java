@@ -1,5 +1,10 @@
 package bigonotation;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Created with IntelliJ IDEA.
  * User: slawomir
@@ -64,6 +69,73 @@ public class Algorithm {
         }
         return array;
     }
+
+
+    /**
+     * O(logN) - quicksort algorithm implementation using ArrayLists
+     *
+     * @param array
+     * @return
+     */
+    public int[] quickSort( int[] array ) {
+        List<Integer> list = Arrays.stream(array).boxed().collect(Collectors.toList());
+
+        list = quickSort( list );
+
+        return list.stream().mapToInt(i -> i).toArray();
+    }
+
+    private List<Integer> quickSort( List<Integer> list) {
+        if( list.size() > 1 ) {
+            int pivotIndex = getPivotIndex(list);
+            int pivotValue = list.get(pivotIndex);
+            List<Integer> left = new ArrayList<>();
+            List<Integer> right = new ArrayList<>();
+            for( int i = 0; i < list.size(); i++ ) {
+                if( i != pivotIndex ) {
+                    if( list.get(i) < pivotValue ) {
+                        left.add(list.get(i));
+                    }
+                    else {
+                        right.add(list.get(i));
+                    }
+                }
+            }
+            left = quickSort( left );
+            right = quickSort( right );
+
+            list = new ArrayList<>(left);
+            list.add(pivotValue);
+            list.addAll(right);
+        }
+        return list;
+    }
+
+    private int getPivotIndex( List<Integer> list ) {
+        return list.size() - 1;
+    }
+
+//    private int[] reorder(int[] array, int start, int end, int pivotIdx ) {
+//
+//        int i = start;
+//        while(true) {
+//            if( array[i] > array[pivotIdx] ) {
+//                int tmp = array[i];
+//                int shifts = 0;
+//                while(shifts < array.length - i) {
+//                    array[i] = array[i+1];
+//                    shifts++;
+//                }
+//                array[array.length] = tmp;
+//            }
+//            else {
+//                i++;
+//            }
+//        }
+//
+//        return array;
+//    }
+
 
 
 

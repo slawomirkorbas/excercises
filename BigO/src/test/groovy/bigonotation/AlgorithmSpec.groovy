@@ -32,4 +32,21 @@ class AlgorithmSpec extends Specification {
             array[0] == 1;
             array[9999] == 10000;
     }
+
+
+    def 'quickSort: works as expected'() {
+        given:
+            Algorithm alg = new Algorithm()
+        and:
+            int[] array = [ 4,2,3,3,3,5 ]
+
+        when:
+            array = alg.quickSort( array )
+        then:
+            array[0] == 2
+            array[array.length - 1] == 5
+        and:
+            System.out.println( array )
+    }
+
 }
