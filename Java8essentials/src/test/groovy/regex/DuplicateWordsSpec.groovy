@@ -20,7 +20,7 @@ class DuplicateWordsSpec extends Specification {
 
         where:
             input                                             | result
-  //           "Goodbye bye bye world world world"               | "Goodbye bye world"
+             "Goodbye bye bye world world world"               | "Goodbye bye world"
   //           "Sam went went to to to his business"             | "Sam went to his business"
   //           "Reya is is the the best player in eye eye game"  | "Reya is the best player in eye game"
   //           "in inthe"                                        | "in inthe"
