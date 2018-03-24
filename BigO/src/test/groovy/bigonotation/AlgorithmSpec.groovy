@@ -38,13 +38,13 @@ class AlgorithmSpec extends Specification {
         given:
             Algorithm alg = new Algorithm()
         and:
-            int[] array = [ 4,2,3,3,3,5 ]
+            int[] array = [ 7,7,3,4,5,6,7,6 ]
 
         when:
-            array = alg.quickSort( array )
+            alg.quickSort( array )
         then:
-            array[0] == 2
-            array[array.length - 1] == 5
+            array[0] == 3
+            array[array.length - 1] == 7
         and:
             System.out.println( array )
     }
