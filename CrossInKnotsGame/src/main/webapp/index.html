@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CrossInKnotsGame</title>
+    <script src="jquery-3.3.1.min.js" ></script>
+    <style type="text/css">
+        .center {
+            position: relative;
+            top: 200px;
+            margin: auto;
+            width: 180px;
+            padding: 10px;
+        }
+        table {
+            width: 100%;
+            border: 1px solid dimgray;
+            table-layout: fixed;
+            font-family: "Arial";
+            font-size: 36px;
+        }
+        .cell {
+            border: 1px solid dimgray;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+        }
+    </style>
+</head>
+<body>
+      <div class="center">
+          <table cellpadding="20" cellspacing="0">
+              <tr><td class="cell" id="0_0"></td><td class="cell" id="0_1"></td><td class="cell" id="0_2"></td></tr>
+              <tr><td class="cell" id="1_0"></td><td class="cell" id="1_1"></td><td class="cell" id="1_2"></td></tr>
+              <tr><td class="cell" id="2_0"></td><td class="cell" id="2_1"></td><td class="cell" id="2_2"></td></tr>
+          </table>
+      </div>
+</body>
+<script>
+    var matrix = [
+        ['','',''],
+        ['','',''],
+        ['','','']
+    ];
+    var winRoutes = [
+        // vertical
+        [ {r:0,c:0}, {r:0,c:1}, {r:0,c:2} ],
+        [ {r:1,c:0}, {r:1,c:1}, {r:1,c:2} ],
+        [ {r:2,c:0}, {r:2,c:1}, {r:2,c:2} ],
+        // horizontal
+        [ {r:0,c:0}, {r:1,c:0}, {r:2,c:0} ],
+        [ {r:0,c:1}, {r:1,c:1}, {r:2,c:1} ],
+        [ {r:0,c:2}, {r:1,c:2}, {r:2,c:2} ],
+        // diagonal
+        [ {r:0,c:0}, {r:1,c:1}, {r:2,c:2} ],
+        [ {r:2,c:0}, {r:1,c:1}, {r:0,c:2} ]
+    ];
+    var diagonalFields = [ {r:1,c:1}, {r:0,c:0}, {r:1,c:2}, {r:2,c:0}, {r:2,c:2}  ];
+
+    $( document ).ready(function() {
+        $(".cell").each(function(index) {
+            $(this).click( function() {
+                setCell($(this));
+            });
+        });
+        redraw();
+    });
+
+    function setCell(cell) {
+        var rc = cell.attr('id').split('_');
+        var row = rc[0];
+        var col = rc[1];
+        if( matrix[row][col] == '' ) {
+            matrix[row][col] = 'O';
+            redraw();
+
+            setTimeout(function(){ nextComputerMove(matrix); }, 500);
+        }
+    }
+
+    function redraw() {
+        for( var row = 0; row < matrix.length; row++ ) {
+            for( var col = 0; col < matrix.length; col++ ) {
+               $('#' + row + "_" + col).html(matrix[row][col]);
+            }
+        }
+    }
+
+    function nextComputerMove(matrix) {
+        if( !doWinningMove(matrix) ) {
+            if( !doBlockingMove(matrix) ) {
+                doBestMove(matrix);
+            }
+        }
+        redraw();
+    }
+
+    function doBestMove(matrix) {
+        for( var i = 0; i < diagonalFields.length; i++ ) {
+            var f = diagonalFields[i];
+            if( matrix[f.r][f.c] == '') {
+                matrix[f.r][f.c] = 'X';
+                break;
+            }
+        }
+    }
+
+    function doBlockingMove(matrix) {
+        var field = findWinningField(matrix, 'O');
+        if( field != null ) {
+            matrix[field.r][field.c] = 'X';
+            return true;
+        }
+        return false;
+    }
+
+    function doWinningMove(matrix) {
+        var field = findWinningField(matrix, 'X');
+        if( field != null ) {
+            matrix[field.r][field.c] = 'X';
+            return true;
+        }
+        return false;
+    }
+
+    function findWinningField(matrix, forFigure ) {
+        var winField = null;
+        for( var route = 0; route < winRoutes.length; route++ ) {
+            var foundInline = 0;
+            for( var field = 0; field < winRoutes[route].length; field++ ) {
+                if( matrix[winRoutes[route][field].r][winRoutes[route][field].c] == forFigure ) {
+                    foundInline++;
+                } else if( matrix[winRoutes[route][field].r][winRoutes[route][field].c] == '' ) {
+                    winField = winRoutes[route][field];
+                }
+            }
+            if( foundInline == 2 && winField != null ){
+                break;
+            }
+            winField = null;
+        }
+        return winField;
+    }
+
+</script>
+</html>
