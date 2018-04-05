@@ -8,39 +8,44 @@
             position: relative;
             top: 200px;
             margin: auto;
-            width: 180px;
+            width: 200px;
             padding: 10px;
         }
         table {
             width: 100%;
-            border: 1px solid dimgray;
+            border: 1px dotted lightblue;
             table-layout: fixed;
             font-family: "Arial";
             font-size: 36px;
         }
         .cell {
-            border: 1px solid dimgray;
+            border: 1px solid lightblue;
             cursor: pointer;
             width: 40px;
             height: 40px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .cell:hover {
+            background-color: lightcyan;
         }
     </style>
 </head>
 <body>
       <div class="center">
-          <table cellpadding="20" cellspacing="0">
-              <tr><td class="cell" id="0_0"></td><td class="cell" id="0_1"></td><td class="cell" id="0_2"></td></tr>
-              <tr><td class="cell" id="1_0"></td><td class="cell" id="1_1"></td><td class="cell" id="1_2"></td></tr>
-              <tr><td class="cell" id="2_0"></td><td class="cell" id="2_1"></td><td class="cell" id="2_2"></td></tr>
-          </table>
+          <form>
+              <table cellpadding="20" cellspacing="0">
+                  <tr><td class="cell" id="0_0"></td><td class="cell" id="0_1"></td><td class="cell" id="0_2"></td></tr>
+                  <tr><td class="cell" id="1_0"></td><td class="cell" id="1_1"></td><td class="cell" id="1_2"></td></tr>
+                  <tr><td class="cell" id="2_0"></td><td class="cell" id="2_1"></td><td class="cell" id="2_2"></td></tr>
+              </table>
+              <br/>
+              <button onclick="clearGrid()">New game</button>
+          </form>
       </div>
 </body>
 <script>
-    var matrix = [
-        ['','',''],
-        ['','',''],
-        ['','','']
-    ];
+    var matrix = [ ['','',''], ['','',''], ['','',''] ];
     var winRoutes = [
         // vertical
         [ {r:0,c:0}, {r:0,c:1}, {r:0,c:2} ],
@@ -55,6 +60,12 @@
         [ {r:2,c:0}, {r:1,c:1}, {r:0,c:2} ]
     ];
     var diagonalFields = [ {r:1,c:1}, {r:0,c:0}, {r:1,c:2}, {r:2,c:0}, {r:2,c:2}  ];
+
+    function clearGrid() {
+        matrix.length = 0;
+        matrix = [ ['','',''], ['','',''], ['','',''] ];
+        redraw();
+    }
 
     $( document ).ready(function() {
         $(".cell").each(function(index) {
@@ -72,8 +83,7 @@
         if( matrix[row][col] == '' ) {
             matrix[row][col] = 'O';
             redraw();
-
-            setTimeout(function(){ nextComputerMove(matrix); }, 500);
+            setTimeout(function(){ nextComputerMove(matrix); }, 700);
         }
     }
 
