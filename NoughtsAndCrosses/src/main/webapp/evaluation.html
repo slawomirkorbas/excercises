@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NoughtsAndCrosses - evaluation</title>
+    <script src="jquery-3.3.1.min.js" ></script>
+    <style type="text/css">
+        .center {
+            position: relative;
+            top: 200px;
+            margin: auto;
+            width: 200px;
+            padding: 10px;
+        }
+        table {
+            width: 100%;
+            border: 1px dotted lightblue;
+            table-layout: fixed;
+            font-family: "Arial";
+            font-size: 36px;
+        }
+        .cell {
+            border: 1px solid lightblue;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .cell:hover {
+            background-color: lightcyan;
+        }
+    </style>
+</head>
+<body>
+<div class="center">
+    <form>
+        <table cellpadding="20" cellspacing="0">
+            <tr><td class="cell" id="0_0"></td><td class="cell" id="0_1"></td><td class="cell" id="0_2"></td></tr>
+            <tr><td class="cell" id="1_0"></td><td class="cell" id="1_1"></td><td class="cell" id="1_2"></td></tr>
+            <tr><td class="cell" id="2_0"></td><td class="cell" id="2_1"></td><td class="cell" id="2_2"></td></tr>
+        </table>
+        <br/>
+        <button onclick="clearGrid()">New game</button>
+    </form>
+</div>
+</body>
+<script>
+var matrix = [ ['','',''], ['','',''], ['','',''] ];
+
+function clearGrid() {
+    matrix.length = 0;
+    matrix = [ ['','',''], ['','',''], ['','',''] ];
+    redraw();
+}
+
+$( document ).ready(function() {
+    $(".cell").each(function(index) {
+        $(this).click( function() {
+            setCell($(this));
+        });
+    });
+    redraw();
+});
+
+function setCell(cell) {
+    var rc = cell.attr('id').split('_');
+    var row = rc[0];
+    var col = rc[1];
+    if( matrix[row][col] == '' ) {
+        matrix[row][col] = 'O';
+        redraw();
+        setTimeout(function(){ continueGame(matrix); }, 700);
+    }
+}
+
+function redraw() {
+    for( var row = 0; row < matrix.length; row++ ) {
+        for( var col = 0; col < matrix.length; col++ ) {
+            $('#' + row + "_" + col).html(matrix[row][col]);
+        }
+    }
+}
+
+function continueGame(matrix) {
+    var computerFigure = 'X'; // let's assume computer is playing with crosses
+    var move = findBestMove( matrix, computerFigure );
+    if( move != null ) {
+        matrix[ move.row ][ move.col ]  = computerFigure;
+        redraw();
+    }
+}
+
+/**
+ * Return null if there is no move possible as the matrix is full.
+ * @param matrix
+ * @param computerFigure
+ * @returns {{row: number, col: number}}
+ */
+function findBestMove(matrix, computerFigure) {
+    console.log("------------------------------");
+    var bestMove = null;
+    var bestResult = -10000;
+    for( var r=0; r < matrix.length; r++ ) {
+        for( var c=0; c < matrix.length; c++ ) {
+            if( matrix[r][c] == '' ) {
+                var matrixCopy = copyMatrix( matrix );
+                matrixCopy[r][c] = computerFigure;
+                var eval = { games: 0, pts: 0, wins: 0, draws: 0, loses: 0};
+                eval = evaluatePossibleGames( matrixCopy, toggle(computerFigure), eval );
+                console.log( "Evaluation for: (" + r + "," + c +") games(" + eval.games + ") wins(" + eval.wins + ") loses(" + eval.loses + ") draws(" + eval.draws + ")  pts=" + eval.pts );
+                if( eval.pts > bestResult ) {
+                    bestResult = eval.pts;
+                    bestMove = { row: r, col: c };
+                }
+            }
+        }
+    }
+    return bestMove;
+}
+
+function evaluatePossibleGames(matrix, currentFigure, evaluation ) {
+    var gameResult = gameState(matrix);
+    if( gameResult != 0 ) {
+        evaluation.games += 1;
+        if( gameResult < 0 ) {
+            evaluation.loses++;
+            evaluation.pts -= (emptyFieldsLeft(matrix) + 1);
+        }
+        else {
+            evaluation.wins++;
+            evaluation.pts += (emptyFieldsLeft(matrix) + 1);
+        }
+    }
+    else if( matrixFull(matrix) ) {
+        evaluation.draws++;
+        evaluation.pts += 1; // one point for a draw
+        evaluation.games += 1;
+    }
+    else {
+        //var matrixCopy = copyMatrix( matrix );
+        for( var r=0; r < matrix.length; r++ ) {
+            for( var c=0; c < matrix.length; c++ ) {
+                var matrixCopy = copyMatrix( matrix );
+                if( matrixCopy[r][c] == '' ) {
+                    matrixCopy[r][c] = currentFigure;
+                    evaluation = evaluatePossibleGames(matrixCopy, toggle(currentFigure), evaluation );
+                }
+            }
+        }
+    }
+
+    return evaluation;
+}
+
+function toggle(figure) {
+    return figure == 'X' ? 'O' : 'X';
+}
+
+/**
+ * Checks
+ * @param matrix
+ * @param figure
+ * @returns  0 - game is not finished, 1 - 'X' has won, -1 - 'O' has won
+ */
+function gameState( matrix ) {
+    var wonX = 1;
+    var wonO = -1;
+
+    // horizontal scan...
+    var countX = 0, countO = 0, winCount = 3;
+    for( var r=0; r < matrix.length; r++ ) {
+        for( var c=0; c < matrix.length; c++ ) {
+            countX = matrix[r][c] == 'X' ? countX + 1 : 0;
+            countO = matrix[r][c] == 'O' ? countO + 1 : 0;
+        }
+        if( countX == winCount || countO == winCount) {
+            return countX == winCount ? wonX : wonO;
+        }
+        countX = countO = 0;
+    }
+    //vertical scan...
+    countX = countO = 0;
+    for( var c=0; c < matrix.length; c++ ) {
+        for( var r=0; r < matrix.length; r++ ) {
+            countX = matrix[r][c] == 'X' ? countX + 1 : 0;
+            countO = matrix[r][c] == 'O' ? countO + 1 : 0;
+        }
+        if( countX == winCount || countO == winCount) {
+            return countX == winCount ? wonX : wonO;
+        }
+        countX = countO = 0;
+    }
+    //diagonal scan left top
+    countX = countO = 0;
+
+    //scan diagonal line  (top-left)
+    for( var r=0; r < matrix.length; r++ ) {
+        var colStart = 0;
+        var rowStart = r;
+        for( var x=colStart, y=rowStart; x < matrix.length && y < matrix.length; x++, y++ ) {
+            countX = matrix[x][y] == 'X' ? countX + 1 : 0;
+            countO = matrix[x][y] == 'O' ? countO + 1 : 0;
+            if( countX == winCount || countO == winCount) {
+                return countX == winCount ? wonX : wonO;
+            }
+        }
+        countX = countO = 0;
+    }
+
+    //scan diagonal line  (bottom-right)
+    for( var r=0; r < matrix.length; r++ ) {
+        var colStart = matrix.length - 1;
+        var rowStart = r;
+        for( var x=colStart, y=rowStart; x < matrix.length && y < matrix.length; x--, y++ ) {
+            countX = matrix[x][y] == 'X' ? countX + 1 : 0;
+            countO = matrix[x][y] == 'O' ? countO + 1 : 0;
+            if( countX == winCount || countO == winCount) {
+                return countX == winCount ? wonX : wonO;
+            }
+        }
+        countX = countO = 0;
+    }
+    return 0;    // game is not over ot matrix is full...
+}
+
+function matrixFull(matrix) {
+    // check if matrix is full...
+    var full = true;
+    for( var r=0; r < matrix.length; r++ ) {
+        for( var c=0; c < matrix.length; c++ ) {
+            if( matrix[r][c] == '' ) {
+                full = false;
+            }
+        }
+        if( !full ) {
+            break;
+        }
+    }
+    return full;
+}
+
+function emptyFieldsLeft(matrix) {
+    var emptyFields = 0;
+    for( var r=0; r < matrix.length; r++ ) {
+        for( var c=0; c < matrix.length; c++ ) {
+            if( matrix[r][c] == '' ) {
+                emptyFields++;
+            }
+        }
+    }
+    return emptyFields;
+}
+
+/**
+ * Copies arrays - deep copy of two dimensional array
+ * @param matrix
+ * @returns {Array}
+ */
+function copyMatrix( matrix ) {
+    var matrixCopy = [ ['','',''], ['','',''], ['','',''] ];
+    for( var r=0; r < matrix.length; r++ ) {
+        for( var c=0; c < matrix.length; c++ ) {
+            matrixCopy[r][c] =  matrix[r][c];
+        }
+    }
+    return matrixCopy;
+}
+
+</script>
+</html>
