@@ -16,13 +16,13 @@
             border: 1px dotted lightblue;
             table-layout: fixed;
             font-family: "Arial";
-            font-size: 36px;
+            font-size: 72px;
         }
         .cell {
             border: 1px solid lightblue;
             cursor: pointer;
-            width: 40px;
-            height: 40px;
+            width: 80px;
+            height: 80px;
             text-align: center;
             vertical-align: middle;
         }
@@ -160,6 +160,16 @@
             winField = null;
         }
         return winField;
+    }
+
+    function isDoubleDanger(matrix) {
+        if( matrix[0][0] == 'O' && matrix[2][2] == 'O' && matrix[1][1] == 'X') {
+            return true;
+        }
+        else if( matrix[0][2] == 'O' && matrix[2][0] == 'O' && matrix[1][1] == 'X') {
+            return true;
+        }
+        return false;
     }
 
 </script>
