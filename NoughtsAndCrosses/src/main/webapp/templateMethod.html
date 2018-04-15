@@ -59,7 +59,7 @@
         [ {r:0,c:0}, {r:1,c:1}, {r:2,c:2} ],
         [ {r:2,c:0}, {r:1,c:1}, {r:0,c:2} ]
     ];
-    var diagonalFields = [ {r:1,c:1}, {r:0,c:0}, {r:1,c:2}, {r:2,c:0}, {r:2,c:2}  ];
+    var bestFields = [ {r:1,c:1}, {r:0,c:0}, {r:0,c:2}, {r:2,c:0}, {r:2,c:2}, {r:0,c:1}, {r:1,c:2}, {r:1,c:0}, {r:2,c:1}  ];
 
     function clearGrid() {
         matrix.length = 0;
@@ -105,11 +105,22 @@
     }
 
     function doBestMove(matrix) {
-        for( var i = 0; i < diagonalFields.length; i++ ) {
-            var f = diagonalFields[i];
-            if( matrix[f.r][f.c] == '') {
-                matrix[f.r][f.c] = 'X';
-                break;
+        if( isDoubleDanger(matrix) ) {
+            for( var i = 5; i < bestFields.length; i++ ) {
+                var f = bestFields[i];
+                if( matrix[f.r][f.c] == '') {
+                    matrix[f.r][f.c] = 'X';
+                    break;
+                }
+            }
+        }
+        else {
+            for( var i = 0; i < bestFields.length; i++ ) {
+                var f = bestFields[i];
+                if( matrix[f.r][f.c] == '') {
+                    matrix[f.r][f.c] = 'X';
+                    break;
+                }
             }
         }
     }

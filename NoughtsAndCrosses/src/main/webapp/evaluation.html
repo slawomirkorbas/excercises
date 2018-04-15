@@ -99,13 +99,13 @@ function continueGame(matrix) {
 function findBestMove(matrix, computerFigure) {
     console.log("------------------------------");
     var bestMove = null;
-    var bestResult = -10000;
+    var bestResult = -1000000;
     for( var r=0; r < matrix.length; r++ ) {
         for( var c=0; c < matrix.length; c++ ) {
             if( matrix[r][c] == '' ) {
                 var matrixCopy = copyMatrix( matrix );
                 matrixCopy[r][c] = computerFigure;
-                var eval = { games: 0, pts: 0, wins: 0, draws: 0, loses: 0};
+                var eval = { games: 0, pts: 0, wins: 0, draws: 0, loses: 0 };
                 eval = evaluatePossibleGames( matrixCopy, toggle(computerFigure), eval );
                 console.log( "Evaluation for: (" + r + "," + c +") games(" + eval.games + ") wins(" + eval.wins + ") loses(" + eval.loses + ") draws(" + eval.draws + ")  pts=" + eval.pts );
                 if( eval.pts > bestResult ) {
@@ -133,11 +133,10 @@ function evaluatePossibleGames(matrix, currentFigure, evaluation ) {
     }
     else if( matrixFull(matrix) ) {
         evaluation.draws++;
-        evaluation.pts += 1; // one point for a draw
+        evaluation.pts += 0;
         evaluation.games += 1;
     }
     else {
-        //var matrixCopy = copyMatrix( matrix );
         for( var r=0; r < matrix.length; r++ ) {
             for( var c=0; c < matrix.length; c++ ) {
                 var matrixCopy = copyMatrix( matrix );
@@ -265,6 +264,17 @@ function copyMatrix( matrix ) {
     }
     return matrixCopy;
 }
+
+function isDoubleDanger(matrix) {
+    if( matrix[0][0] == 'O' && matrix[2][2] == 'O' && matrix[1][1] == 'X') {
+        return true;
+    }
+    else if( matrix[0][2] == 'O' && matrix[2][0] == 'O' && matrix[1][1] == 'X') {
+        return true;
+    }
+    return false;
+}
+
 
 </script>
 </html>
