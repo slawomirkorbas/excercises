@@ -91,6 +91,7 @@
         for( var row = 0; row < matrix.length; row++ ) {
             for( var col = 0; col < matrix.length; col++ ) {
                $('#' + row + "_" + col).html(matrix[row][col]);
+               $('#' + row + "_" + col).css('color', matrix[row][col] == 'X' ? 'red' : 'green' );
             }
         }
     }

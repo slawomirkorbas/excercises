@@ -2,7 +2,7 @@ var totalFields = 9;//matrix.length * matrix.length;
 var winCount = 3;
 var COMPUTER_WIN = 1;
 var DRAW = 0;
-var LOSE = -1;
+var COMPUTER_LOST = -1;
 var NOT_FINISHED = 728;
 
 
