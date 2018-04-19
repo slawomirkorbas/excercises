@@ -1,14 +1,10 @@
 var totalFields = 9;//matrix.length * matrix.length;
 var winCount = 3;
+var WIN = 1;
+var DRAW = 0;
+var LOSE = -1;
+var NOT_FINISHED = 728;
 
-function continueGame(matrix) {
-    var computerFigure = 'X'; // let's assume computer is playing with crosses
-    var move = findBestMove( matrix, computerFigure );
-    if( move != null ) {
-        matrix[ move.row ][ move.col ]  = computerFigure;
-        redraw();
-    }
-}
 
 /**
  * Return null if there is no move possible as the matrix is full.
@@ -40,18 +36,22 @@ function findBestMove(matrix, computerFigure) {
 
 function evaluatePossibleGames(matrix, currentFigure, evaluation, movesCount ) {
     var gameResult = gameState(matrix);
-    if( gameResult != 0 ) {
+    if( gameResult == LOSE ) {
         evaluation.games += 1;
-        if( gameResult < 0 ) {
-            evaluation.loses++;
-            evaluation.pts -= (1 + emptyFieldsLeft(matrix));
-            evaluation.movesTotal += movesCount;
+        evaluation.loses++;
+        if( movesCount == 2 ) {
+            // 2 means we are losing in the next opponents move - this should avoided game solution so we give it -100
+            evaluation.pts -= 100;
         }
         else {
-            evaluation.wins++;
-            evaluation.pts += 1;// (1 + emptyFieldsLeft(matrix));
-            evaluation.movesTotal += movesCount;
+            evaluation.pts -= (1 + emptyFieldsLeft(matrix));
         }
+    }
+    else if( gameResult == WIN ) {
+        evaluation.movesTotal += movesCount;
+        evaluation.wins++;
+        evaluation.pts += (1 + emptyFieldsLeft(matrix));
+        evaluation.movesTotal += movesCount;
     }
     else if( matrixFull(matrix) ) {
         evaluation.draws++;
@@ -59,7 +59,7 @@ function evaluatePossibleGames(matrix, currentFigure, evaluation, movesCount ) {
         evaluation.games += 1;
         evaluation.movesTotal += movesCount;
     }
-    else {
+    else if( gameResult == NOT_FINISHED ) {
         for( var r=0; r < matrix.length; r++ ) {
             for( var c=0; c < matrix.length; c++ ) {
                 var matrixCopy = copyMatrix( matrix );
@@ -168,9 +168,6 @@ function toggle(figure) {
  * @returns  0 - game is not finished, 1 - 'X' has won, -1 - 'O' has won
  */
 function gameState( matrix ) {
-    var wonX = 1;
-    var wonO = -1;
-
     // horizontal scan...
     var countX = 0, countO = 0, winCount = 3;
     for( var r=0; r < matrix.length; r++ ) {
@@ -179,7 +176,7 @@ function gameState( matrix ) {
             countO = matrix[r][c] == 'O' ? countO + 1 : 0;
         }
         if( countX == winCount || countO == winCount) {
-            return countX == winCount ? wonX : wonO;
+            return countX == winCount ? WIN : LOSE;
         }
         countX = countO = 0;
     }
@@ -191,7 +188,7 @@ function gameState( matrix ) {
             countO = matrix[r][c] == 'O' ? countO + 1 : 0;
         }
         if( countX == winCount || countO == winCount) {
-            return countX == winCount ? wonX : wonO;
+            return countX == winCount ? WIN : LOSE;
         }
         countX = countO = 0;
     }
@@ -206,7 +203,7 @@ function gameState( matrix ) {
             countX = matrix[x][y] == 'X' ? countX + 1 : 0;
             countO = matrix[x][y] == 'O' ? countO + 1 : 0;
             if( countX == winCount || countO == winCount) {
-                return countX == winCount ? wonX : wonO;
+                return countX == winCount ? WIN : LOSE;
             }
         }
         countX = countO = 0;
@@ -220,12 +217,12 @@ function gameState( matrix ) {
             countX = matrix[x][y] == 'X' ? countX + 1 : 0;
             countO = matrix[x][y] == 'O' ? countO + 1 : 0;
             if( countX == winCount || countO == winCount) {
-                return countX == winCount ? wonX : wonO;
+                return countX == winCount ? WIN : LOSE;
             }
         }
         countX = countO = 0;
     }
-    return 0;    // game is not over or matrix is full...
+    return NOT_FINISHED;    // game is not over or matrix is full...
 }
 
 function matrixFull(matrix) {

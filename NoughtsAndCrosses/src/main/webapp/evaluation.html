@@ -83,5 +83,14 @@ function redraw() {
     }
 }
 
+function continueGame(matrix) {
+    var computerFigure = 'X'; // let's assume computer is playing with crosses
+    var move = findBestMove( matrix, computerFigure );
+    if( move != null ) {
+        matrix[ move.row ][ move.col ]  = computerFigure;
+        redraw();
+    }
+}
+
 </script>
 </html>
