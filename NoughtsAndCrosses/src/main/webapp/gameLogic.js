@@ -1,6 +1,6 @@
 var totalFields = 9;//matrix.length * matrix.length;
 var winCount = 3;
-var WIN = 1;
+var COMPUTER_WIN = 1;
 var DRAW = 0;
 var LOSE = -1;
 var NOT_FINISHED = 728;
@@ -36,18 +36,18 @@ function findBestMove(matrix, computerFigure) {
 
 function evaluatePossibleGames(matrix, currentFigure, evaluation, movesCount ) {
     var gameResult = gameState(matrix);
-    if( gameResult == LOSE ) {
+    if( gameResult == COMPUTER_LOST ) {
         evaluation.games += 1;
         evaluation.loses++;
         if( movesCount == 2 ) {
-            // 2 means we are losing in the next opponents move - this should avoided game solution so we give it -100
+            // 2 means we are losing in the next opponents move - this should be avoided game solution so we give it -100
             evaluation.pts -= 100;
         }
         else {
             evaluation.pts -= (1 + emptyFieldsLeft(matrix));
         }
     }
-    else if( gameResult == WIN ) {
+    else if( gameResult == COMPUTER_WIN ) {
         evaluation.movesTotal += movesCount;
         evaluation.wins++;
         evaluation.pts += (1 + emptyFieldsLeft(matrix));
@@ -176,7 +176,7 @@ function gameState( matrix ) {
             countO = matrix[r][c] == 'O' ? countO + 1 : 0;
         }
         if( countX == winCount || countO == winCount) {
-            return countX == winCount ? WIN : LOSE;
+            return countX == winCount ? COMPUTER_WIN : COMPUTER_LOST;
         }
         countX = countO = 0;
     }
@@ -188,7 +188,7 @@ function gameState( matrix ) {
             countO = matrix[r][c] == 'O' ? countO + 1 : 0;
         }
         if( countX == winCount || countO == winCount) {
-            return countX == winCount ? WIN : LOSE;
+            return countX == winCount ? COMPUTER_WIN : COMPUTER_LOST;
         }
         countX = countO = 0;
     }
@@ -203,7 +203,7 @@ function gameState( matrix ) {
             countX = matrix[x][y] == 'X' ? countX + 1 : 0;
             countO = matrix[x][y] == 'O' ? countO + 1 : 0;
             if( countX == winCount || countO == winCount) {
-                return countX == winCount ? WIN : LOSE;
+                return countX == winCount ? COMPUTER_WIN : COMPUTER_LOST;
             }
         }
         countX = countO = 0;
@@ -217,7 +217,7 @@ function gameState( matrix ) {
             countX = matrix[x][y] == 'X' ? countX + 1 : 0;
             countO = matrix[x][y] == 'O' ? countO + 1 : 0;
             if( countX == winCount || countO == winCount) {
-                return countX == winCount ? WIN : LOSE;
+                return countX == winCount ? COMPUTER_WIN : COMPUTER_LOST;
             }
         }
         countX = countO = 0;
