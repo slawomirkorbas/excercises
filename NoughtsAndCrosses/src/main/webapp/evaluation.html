@@ -14,16 +14,16 @@
         }
         table {
             width: 100%;
-            border: 1px dotted lightblue;
+            border: 3px solid lightblue;
             table-layout: fixed;
             font-family: "Arial";
-            font-size: 36px;
+            font-size: 72px;
         }
         .cell {
-            border: 1px solid lightblue;
+            border: 3px solid lightblue;
             cursor: pointer;
-            width: 40px;
-            height: 40px;
+            width: 80px;
+            height: 85px;
             text-align: center;
             vertical-align: middle;
         }
@@ -33,16 +33,18 @@
     </style>
 </head>
 <body>
-<div class="center">
-    <form>
-        <table cellpadding="20" cellspacing="0">
-            <tr><td class="cell" id="0_0"></td><td class="cell" id="0_1"></td><td class="cell" id="0_2"></td></tr>
-            <tr><td class="cell" id="1_0"></td><td class="cell" id="1_1"></td><td class="cell" id="1_2"></td></tr>
-            <tr><td class="cell" id="2_0"></td><td class="cell" id="2_1"></td><td class="cell" id="2_2"></td></tr>
-        </table>
-        <br/>
-        <button onclick="clearGrid()">New game</button>
-    </form>
+<div style="width:100%;">
+    <div class="center">
+        <form>
+            <table cellpadding="20" cellspacing="0">
+                <tr><td class="cell" id="0_0"></td><td class="cell" id="0_1"></td><td class="cell" id="0_2"></td></tr>
+                <tr><td class="cell" id="1_0"></td><td class="cell" id="1_1"></td><td class="cell" id="1_2"></td></tr>
+                <tr><td class="cell" id="2_0"></td><td class="cell" id="2_1"></td><td class="cell" id="2_2"></td></tr>
+            </table>
+            <br/>
+            <button onclick="clearGrid()">New game</button>
+        </form>
+    </div>
 </div>
 </body>
 <script>
