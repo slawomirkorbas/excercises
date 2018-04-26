@@ -1,7 +1,5 @@
 var totalFields = 9;//matrix.length * matrix.length;
-var winCount = 3;
 var COMPUTER_WIN = 1;
-var DRAW = 0;
 var COMPUTER_LOST = -1;
 var NOT_FINISHED = 728;
 
@@ -67,12 +65,7 @@ function evaluateGames(matrix, figure, result) {
                 }
             }
         }
-        if( isOpponentsTurn(figure) )  {
-            result += min;
-        }
-        else {
-            result += max;
-        }
+        result += ( isOpponentsTurn(figure) ? min : max );
     }
     return result;
 }
@@ -162,18 +155,6 @@ function countOccupiedFields(matrix) {
         }
     }
     return count;
-}
-
-function emptyFieldsLeft(matrix) {
-    var emptyFields = 0;
-    for( var r=0; r < matrix.length; r++ ) {
-        for( var c=0; c < matrix.length; c++ ) {
-            if( matrix[r][c] == '' ) {
-                emptyFields++;
-            }
-        }
-    }
-    return  emptyFields;
 }
 
 /**
